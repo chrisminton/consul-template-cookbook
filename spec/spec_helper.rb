@@ -8,4 +8,6 @@ RSpec.configure do |c|
   c.formatter = :documentation
   # log level
   c.log_level = :error
+  c.platform = 'centos'
+  c.version = '7.8.2003'
 end

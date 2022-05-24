@@ -33,22 +33,22 @@ install_arch = if node['kernel']['machine'].include?('arm64')
                  'amd64'
                end
 install_version = ['consul-template', node['consul_template']['version'], 'linux', install_arch].join('_')
+destination_dir = ['consul-template', node['consul_template']['version']].join('_')
+url = ::URI.join(node['consul_template']['base_url'], "#{node['consul_template']['version']}/", "#{install_version}.zip").to_s
+install_path = "#{node['consul_template']['install_dir']}/#{destination_dir}"
+archive_path = ::File.join(Chef::Config[:file_cache_path], "#{install_version}.zip")
 
-url = ::URI.join(node['consul_template']['base_url'], "#{node['consul_template']['version']}/", "#{install_version}.tgz").to_s
-install_path = "#{node['consul_template']['install_dir']}/#{install_version}"
-
-directory install_path do
-  owner service_user.name
-  group service_group.name
+remote_file archive_path do
+  source url
+  checksum node['consul_template']['checksums'][install_version]
+  action :create_if_missing
 end
 
-tar_extract url do
-  checksum node['consul_template']['checksums'][install_version]
-  target_dir install_path
-  creates "#{node['consul_template']['install_dir']}/consul-template"
-  user service_user.name
-  group service_group.name
+archive_file archive_path do
+  destination install_path
   mode '0755'
+  owner service_user.name
+  group service_group.name
 end
 
 link "#{node['consul_template']['install_dir']}/consul-template" do
@@ -76,6 +76,7 @@ After=network-online.target vault.service consul.service
 
 [Service]
 Environment=#{node['consul_template']['environment_variables'].map { |key, val| %("#{key}=#{val}") }.join(' ')}
+ExecStartPre=#{node['consul_template']['service_execstartpre']}
 ExecStart=#{command}
 ExecReload=/bin/kill -HUP $MAINPID
 User=#{service_user.name}

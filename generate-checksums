@@ -14,11 +14,12 @@ version=$1
 empty_sha=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
 systems=(linux_386 linux_amd64 linux_arm linux_arm64)
 files=()
+suffix="zip"
 
 function get_files {
   for system in "${systems[@]}"
   do
-    file=("consul-template_${version}_${system}.tgz")
+    file=("consul-template_${version}_${system}.${suffix}")
     files+=(${file})
   done
 }
@@ -33,7 +34,7 @@ function print_checksums {
     if [ "$checksum" = "$empty_sha" ]; then
       >&2 echo "Failed to get binary: $binary"
     else
-      echo "'${file//.tgz}' => '$checksum',"
+      echo "'${file//.${suffix}}' => '$checksum',"
     fi
   done
 }

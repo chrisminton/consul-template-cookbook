@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'consul_template_config resource' do
   let(:chef_run) do
-    ChefSpec::SoloRunner.new(step_into: ['consul_template_config'], platform: 'centos', version: '7.6')
+    ChefSpec::SoloRunner.new(step_into: ['consul_template_config'])
                         .converge('test::default')
   end
 

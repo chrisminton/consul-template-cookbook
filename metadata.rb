@@ -5,11 +5,9 @@ maintainer       'Simão Martins'
 maintainer_email 'simao.martins@tecnico.ulisboa.pt'
 license          'Apache-2.0'
 description      'Installs/Configures consul-template. This is a fork of the consul-template cookbook which fixes some errors and removes support for Windows.'
-version          '1.0.0'
-chef_version     '>= 14.10'
+version          '1.1.0'
+chef_version     '>= 15.0.293'
 
 supports 'ubuntu', '>= 18.04'
 supports 'debian', '>= 9.8'
 supports 'centos', '>= 7.6'
-
-depends 'tar', '~> 2.2.0'
