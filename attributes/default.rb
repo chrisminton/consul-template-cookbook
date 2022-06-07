@@ -15,6 +15,7 @@ default['consul_template'] = {
   'service_user' => 'consul-template',
   'service_group' => 'consul-template',
   'service_execstartpre' => "",
+  'service_timeoutstartsec' => nil,
   'template_mode' => 0600,
 
   # Config attributes

@@ -65,7 +65,7 @@ vault_addr_option = vault_addr.nil? || vault_addr.empty? ? '' : " -vault-addr #{
 
 command = "#{node['consul_template']['install_dir']}/consul-template -config #{node['consul_template']['config_dir']}" \
           "#{consul_addr_option}#{vault_addr_option} -log-level #{node['consul_template']['log_level']}"
-
+timeout_start = node['consul_template']['service_timeoutstartsec'] ? "TimeoutStartSec=#{node['consul_template']['service_timeoutstartsec']}" : ''
 systemd_unit 'consul-template.service' do
   content <<-EOF
 [Unit]
@@ -82,6 +82,7 @@ ExecReload=/bin/kill -HUP $MAINPID
 User=#{service_user.name}
 Restart=on-failure
 RestartSec=5s
+#{timeout_start}
 
 [Install]
 WantedBy=multi-user.target
